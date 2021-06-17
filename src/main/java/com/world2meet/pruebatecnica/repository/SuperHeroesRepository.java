@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SuperHeroesRepository extends JpaRepository<SuperHeroes, String> {
+public interface SuperHeroesRepository extends JpaRepository<SuperHeroes, Long> {
 
     @Query(value="select sh from SuperHeroes sh where sh.name like %?1%")
     List<SuperHeroes> findByTextInName(String text);

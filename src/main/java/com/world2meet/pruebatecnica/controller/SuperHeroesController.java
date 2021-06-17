@@ -1,6 +1,7 @@
 package com.world2meet.pruebatecnica.controller;
 
 import com.world2meet.pruebatecnica.config.TrackExecutionTime;
+import com.world2meet.pruebatecnica.dto.SuperHeroesDto;
 import com.world2meet.pruebatecnica.entity.SuperHeroes;
 import com.world2meet.pruebatecnica.exception.BusinessException;
 import com.world2meet.pruebatecnica.service.SuperHeroesService;
@@ -53,7 +54,7 @@ public class SuperHeroesController {
 
     @GetMapping("/{id}")
     @TrackExecutionTime
-    public ResponseEntity<?> findById(@PathVariable("id") String id) {
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
         Validation<String, SuperHeroes> response = superHeroesService.findById(id);
         if (response.isSuccess()) {
             return ResponseEntity.ok()
@@ -87,8 +88,9 @@ public class SuperHeroesController {
 
     @PostMapping("/save")
     @TrackExecutionTime
-    public ResponseEntity<?> insert(@RequestBody SuperHeroes superHeroe) {
-        Validation<String, SuperHeroes> response = superHeroesService.insert(superHeroe);
+    public ResponseEntity<?> insert(@RequestBody SuperHeroesDto superHeroesDto) {
+        Validation<String, SuperHeroes> response = superHeroesService.insert(
+                new SuperHeroes(superHeroesDto.getName(), superHeroesDto.getDescriptionRowers()));
         if (response.isSuccess()) {
             return ResponseEntity.ok()
                     .cacheControl(cacheControl)
@@ -102,13 +104,13 @@ public class SuperHeroesController {
 
     @PostMapping("/update/{id}")
     @TrackExecutionTime
-    public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody SuperHeroes superHeroe) {
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody SuperHeroesDto superHeroesDto) {
         Validation<String, SuperHeroes> superHeroeAux = superHeroesService.findById(id);
 
         if (superHeroeAux.isSuccess()) {
             SuperHeroes supHer = superHeroeAux.success();
-            supHer.setName(superHeroe.getName());
-            supHer.setDescriptionRowers(superHeroe.getDescriptionRowers());
+            supHer.setName(superHeroesDto.getName());
+            supHer.setDescriptionRowers(superHeroesDto.getDescriptionRowers());
 
             Validation<String, SuperHeroes> response = superHeroesService.insert(supHer);
             if (response.isSuccess()) {
@@ -129,9 +131,9 @@ public class SuperHeroesController {
 
     }
 
-    @DeleteMapping("/delete/{id}}")
+    @DeleteMapping("/delete/{id}")
     @TrackExecutionTime
-    public ResponseEntity<?> delete(@PathVariable("id") String id) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         Validation<String, BusinessException> response = superHeroesService.delete(id);
         if (response.isSuccess()) {
             return ResponseEntity.ok()

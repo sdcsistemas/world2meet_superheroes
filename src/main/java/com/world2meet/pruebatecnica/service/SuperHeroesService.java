@@ -10,12 +10,12 @@ public interface SuperHeroesService {
 
     List<SuperHeroes> findAll();
 
-    Validation<String, SuperHeroes> findById(String id);
+    Validation<String, SuperHeroes> findById(Long id);
 
     Validation<String, List<SuperHeroes>> findByTextInName(String text);
 
     Validation<String, SuperHeroes> insert(SuperHeroes superHeroes);
 
-    Validation<String, BusinessException> delete(String id);
+    Validation<String, BusinessException> delete(Long id);
 
 }
